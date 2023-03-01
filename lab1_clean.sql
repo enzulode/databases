@@ -1,5 +1,6 @@
 BEGIN;
 
+DROP TABLE ship_passengers_registry CASCADE;
 DROP TABLE ship_interior_registry CASCADE;
 DROP TABLE interior_element CASCADE;
 DROP TABLE ship_passport CASCADE;
