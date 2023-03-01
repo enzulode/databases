@@ -49,4 +49,10 @@ VALUES (1, 1),
        (1, 2),
        (1, 2);
 
+-- ship passengers registry
+INSERT INTO ship_passengers_registry (ship_id, person_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 4);
+
 COMMIT;
