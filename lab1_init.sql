@@ -83,4 +83,9 @@ CREATE TABLE ship_interior_registry (
     element_id INT NOT NULL REFERENCES interior_element(id)
 );
 
+CREATE TABLE ship_passengers_registry (
+    ship_id INT REFERENCES ship(id),
+    person_id INT REFERENCES person(id)
+);
+
 COMMIT;
