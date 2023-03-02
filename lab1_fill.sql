@@ -7,13 +7,17 @@ VALUES ('Диаспара', 1.0, 2.0, 3.0),
        ('Море', 1.0, 2.0, 3.0),
        ('Океан', 1.0, 2.0, 3.0);
 
+-- haircut
+INSERT INTO coloured_haircut (color, date_from, name)
+VALUES ('розовый', (TIMESTAMP '2023-01-21 12:34:12'), 'андрекат'),
+       ('блонд', (TIMESTAMP '2023-02-21 12:34:12'), 'горшок');
 
 -- person table
-INSERT INTO person (name, age, gender, location_id, character)
-VALUES ('Мастер', 42, 'М', 2, 'Сумасшедший'),
-       ('Олвин', 12, 'М', 1, 'Аскет'),
-       ('Иван', 12, 'М', 1, 'Аскет'),
-       ('Дима', 12, 'М', 1, 'Сумасшедший');
+INSERT INTO person (name, age, gender, location_id, character, haircut_id)
+VALUES ('Мастер', 42, 'М', 2, 'Сумасшедший', 1),
+       ('Олвин', 12, 'М', 1, 'Аскет', 2),
+       ('Иван', 12, 'М', 1, 'Аскет', 1),
+       ('Дима', 12, 'М', 1, 'Сумасшедший', 1);
 
 
 -- ship license
@@ -54,5 +58,10 @@ INSERT INTO ship_passengers_registry (ship_id, person_id)
 VALUES (1, 1),
        (1, 2),
        (1, 4);
+
+
+-- person passports registry
+INSERT INTO person_passports_registry (person_id, passport_id)
+VALUES (1, 1);
 
 COMMIT;

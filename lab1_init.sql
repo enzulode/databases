@@ -30,6 +30,15 @@ CREATE TYPE interior_element_type AS ENUM (
     'декор'
 );
 
+CREATE TYPE haircut_color AS ENUM (
+    'блонд',
+    'рыжий',
+    'чёрный',
+    'белый',
+    'розовый',
+    'фиолетовый'
+);
+
 CREATE TABLE location (
     id SERIAL PRIMARY KEY,
     description location_description NOT NULL DEFAULT 'Неизвестно'::location_description,
@@ -38,13 +47,21 @@ CREATE TABLE location (
     z_coord FLOAT NOT NULL
 );
 
+CREATE TABLE coloured_haircut(
+    id SERIAL PRIMARY KEY,
+    color haircut_color NOT NULL,
+    date_from TIMESTAMP NOT NULL,
+    name VARCHAR(32) NOT NULL
+);
+
 CREATE TABLE person (
     id SERIAL PRIMARY KEY,
     name VARCHAR(32) NOT NULL,
     age INT NOT NULL,
     gender person_gender NOT NULL,
     location_id INT NOT NULL REFERENCES location(id),
-    character person_character NOT NULL DEFAULT 'Нет информации'::person_character
+    character person_character NOT NULL DEFAULT 'Нет информации'::person_character,
+    haircut_id INT NOT NULL REFERENCES person(id)
 );
 
 CREATE TABLE ship_licence (
@@ -86,6 +103,11 @@ CREATE TABLE ship_interior_registry (
 CREATE TABLE ship_passengers_registry (
     ship_id INT REFERENCES ship(id),
     person_id INT REFERENCES person(id)
+);
+
+CREATE TABLE person_passports_registry (
+    person_id INT REFERENCES person(id),
+    passport_id INT REFERENCES ship_passport(id)
 );
 
 COMMIT;
