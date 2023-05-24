@@ -1,0 +1,26 @@
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: enzulode
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+      - ./fill.sql:/scripts/fill.sql
+      - ./clean.sql:/scripts/clean.sql
+      - ./init.sql:/scripts/init.sql
+      - ./show.sql:/scripts/show.sql
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
