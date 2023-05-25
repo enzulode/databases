@@ -97,20 +97,58 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION ship_interior_elements_trigger_function() RETURNS TRIGGER AS $$
     DECLARE
         current_items_amount INT;
+        old_items_amount INT;
         affected_ship INT;
+        old_affected_ship INT;
+
     BEGIN
 
-        affected_ship = new.ship_id;
+        IF (tg_op = 'INSERT') THEN
 
-        SELECT count_ship_items(affected_ship)
-        INTO current_items_amount;
+            affected_ship = new.ship_id;
 
-        UPDATE ship
-        SET interior_items_amount = current_items_amount
-        WHERE id = affected_ship;
+            SELECT count_ship_items(affected_ship)
+            INTO current_items_amount;
 
-        RETURN new;
+            UPDATE ship
+            SET interior_items_amount = current_items_amount
+            WHERE id = affected_ship;
 
+            RETURN new;
+
+        ELSEIF (tg_op = 'UPDATE') THEN
+
+            affected_ship = new.ship_id;
+            old_affected_ship = old.ship_id;
+
+            SELECT count_ship_items(affected_ship)
+            INTO current_items_amount;
+
+            SELECT count_ship_items(old_affected_ship)
+            INTO old_items_amount;
+
+            UPDATE ship
+            SET interior_items_amount = current_items_amount
+            WHERE id = affected_ship;
+
+            UPDATE ship
+            SET interior_items_amount = old_items_amount
+            WHERE id = old_affected_ship;
+
+            RETURN new;
+
+        ELSE
+            affected_ship = old.ship_id;
+
+            SELECT count_ship_items(affected_ship)
+            INTO current_items_amount;
+
+            UPDATE ship
+            SET interior_items_amount = current_items_amount
+            WHERE id = affected_ship;
+
+            RETURN new;
+        END IF;
     END;
 $$
 LANGUAGE plpgsql;
@@ -119,5 +157,7 @@ CREATE OR REPLACE TRIGGER ship_items_trigger
 AFTER INSERT OR UPDATE OR DELETE ON ship_interior_registry
 FOR EACH ROW
 EXECUTE FUNCTION ship_interior_elements_trigger_function();
+
+
 
 COMMIT;
